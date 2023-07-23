@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node src/index.ts"
+    "dev": "ts-node src/index.ts",
+    "prod": "SETAGE=production npm run dev",
+    "build": "tsc -p tsconfig.json",
+    "build-with-out-consider-tsconfig-file": "tsc src/index.ts",
+    "start": "node dist/index.js"
   },
   "keywords": [],
   "author": "",

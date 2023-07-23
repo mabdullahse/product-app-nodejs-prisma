@@ -1,17 +1,14 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id        String    @id @default(uuid())
+  id        String    @id @default(uuid()) @map("_id") @db.ObjectId
   createdAt DateTime  @default(now())
   username  String    @unique
   password  String
@@ -19,13 +16,14 @@ model User {
 }
 
 model Product {
-  id        String   @id @default(uuid())
+  id        String   @id @default(uuid()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
 
-  name        String   @db.VarChar(255)
+  name        String
   belongsToId String
   belongsTo   User     @relation(fields: [belongsToId], references: [id])
   updates     Update[]
+
   @@unique([id, belongsToId])
 }
 
@@ -36,7 +34,7 @@ enum UPDATE_STATUS {
 }
 
 model Update {
-  id        String   @id @default(uuid())
+  id        String   @id @default(uuid()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -46,17 +44,17 @@ model Update {
   version String?
   asset   String?
 
-  productId   String
-  product     Product       @relation(fields: [productId], references: [id])
+  productId    String
+  product      Product       @relation(fields: [productId], references: [id])
   updatePoints UpdatePoint[]
 }
 
 model UpdatePoint {
-  id        String   @id @default(uuid())
+  id        String   @id @default(uuid()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime
 
-  name        String @db.VarChar(255)
+  name        String
   description String
 
   updateId String
